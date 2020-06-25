@@ -22,14 +22,17 @@ The following **optional** features are implemented:
 - [x] User can search for a movie.
 - [x] All images fade in as they are loading.
 - [x] User can view the large movie poster by tapping on a cell.
-- [ ] For the large poster, load the low resolution image first and then switch to the high resolution image when complete.
+- [x] For the large poster, load the low resolution image first and then switch to the high resolution image when complete.
 - [x] Customize the selection effect of the cell.
 - [x] Customize the navigation bar.
 - [x] Customize the UI.
 
 The following **additional** features are implemented:
 
-- [ ] List anything else that you can get done to improve the app functionality!
+- [x] See related movies
+- [x] See movie rating
+- [x] See movie reviews (Tapping on the movie rating)
+- [x] See movie trailer 
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
@@ -46,7 +49,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Unable to add third party Progress HUD, will revise in the future.
+
 
 ## Credits
 
