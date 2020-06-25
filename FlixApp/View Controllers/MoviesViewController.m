@@ -12,12 +12,17 @@
 #import "DetailsViewController.h"
 #import "SVProgressHUD.h"
 
-@interface MoviesViewController () <UITableViewDelegate, UITableViewDataSource>
-
+@interface MoviesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>{
+    BOOL isFiltered;
+    
+}
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *movies;
+@property (nonatomic, strong) NSArray *searchMovies;
+@property (nonatomic, strong) NSArray *unsearchMovies;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 
 
@@ -30,8 +35,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    isFiltered = false;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.searchBar.delegate = self;
     
     [self.activityIndicator startAnimating];
     //[SVProgressHUD show];
@@ -72,6 +79,8 @@
            else {
                NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                self.movies = dataDictionary[@"results"];
+               NSLog(@"%@", self.movies);
+               self.searchMovies = self.movies;
                [self.tableView reloadData];
                
                // TODO: Get the array of movies
@@ -87,12 +96,65 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.movies.count;
+    return self.searchMovies.count;
 }
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+     if (searchText.length != 0) {
+            
+            NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+            return [NSLocalizedString(evaluatedObject[@"title"],nil) containsString:searchText];
+            }];
+            self.searchMovies = [self.movies filteredArrayUsingPredicate:predicate];
+            
+            
+        }
+        else {
+            self.searchMovies = self.movies;
+        }
+        
+        [self.tableView reloadData];
+     
+}
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     MovieCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MovieCell"];
     //UITableViewCell *cell = [[UITableViewCell alloc] init];
+             NSDictionary *movie = self.searchMovies[indexPath.row];
+             cell.titleLabel.text = movie[@"title"];
+             cell.synopsisLabel.text = movie[@"overview"];
+             NSString *baseURLString = @"https://image.tmdb.org/t/p/w500";
+             NSString *posterURLString = movie[@"poster_path"];
+             NSString *fullPosterURLString = [baseURLString stringByAppendingString:posterURLString];
+             NSURL *posterURL = [NSURL URLWithString:fullPosterURLString];
+             cell.posterView.image = nil;
+            //[cell.posterView setImageWithURL:posterURL];
+            NSURLRequest *request = [NSURLRequest requestWithURL:posterURL];
+            [cell.posterView setImageWithURLRequest:request placeholderImage:nil
+            success:^(NSURLRequest *imageRequest, NSHTTPURLResponse *imageResponse, UIImage *image) {
+                
+                // imageResponse will be nil if the image is cached
+                if (imageResponse) {
+                    NSLog(@"Image was NOT cached, fade in image");
+                    cell.posterView.alpha = 0.0;
+                    cell.posterView.image = image;
+                    
+                    //Animate UIImageView back to alpha 1 over 0.3sec
+                    [UIView animateWithDuration:0.3 animations:^{
+                        cell.posterView.alpha = 1.0;
+                    }];
+                }
+                else {
+                    NSLog(@"Image was cached so just update the image");
+                    cell.posterView.image = image;
+                }
+            }
+            failure:^(NSURLRequest *request, NSHTTPURLResponse * response, NSError *error) {
+                // do something for the failure condition
+            }];
     
+/*
     NSDictionary *movie = self.movies[indexPath.row];
     cell.titleLabel.text = movie[@"title"];
     cell.synopsisLabel.text = movie[@"overview"];
@@ -103,7 +165,8 @@
     cell.posterView.image = nil;
     [cell.posterView setImageWithURL:posterURL];
     
-    
+    }
+*/
     //cell.textLabel.text = movie[@"title"];
     
     //NSLog(@"%@",[NSString stringWithFormat:@"row: %d, section:%d", indexPath.row, indexPath.section]);
