@@ -9,6 +9,7 @@
 #import "DetailsViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "TrailerViewController.h"
+#import "LargePosterViewController.h"
 
 @interface DetailsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *backdropView;
@@ -51,6 +52,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     TrailerViewController *trailerViewController = [segue destinationViewController];
     trailerViewController.movie= self.movie;
+    LargePosterViewController *largePosterViewController = [segue destinationViewController];
+    largePosterViewController.movie = self.movie;
 }
 
 

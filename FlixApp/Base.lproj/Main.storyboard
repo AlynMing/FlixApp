@@ -197,10 +197,18 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C9T-eU-qxu">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="232"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="SQy-4N-IH4" appends="YES" id="Dfo-ii-3oV"/>
+                                </connections>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XUn-JJ-pdI">
+                            <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XUn-JJ-pdI">
                                 <rect key="frame" x="16" y="184" width="116" height="157"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="YjC-cg-Tf4" appends="YES" id="ZEX-Kn-Bee"/>
+                                </connections>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zw2-By-6rE">
                                 <rect key="frame" x="16" y="374" width="343" height="21"/>
@@ -224,7 +232,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <segue destination="UZm-g5-YIw" kind="presentation" id="rA1-tn-aaN"/>
+                                    <segue destination="UZm-g5-YIw" kind="presentation" id="xOk-FX-BHn"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -244,6 +252,16 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LHZ-d5-HAf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="YjC-cg-Tf4">
+                    <connections>
+                        <segue destination="isU-jg-EjW" kind="show" id="12S-er-uwk"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="SQy-4N-IH4">
+                    <connections>
+                        <segue destination="UZm-g5-YIw" kind="presentation" id="vvF-IH-pOP"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1805.5999999999999" y="23.645320197044335"/>
         </scene>
@@ -275,6 +293,31 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k9g-lH-8O9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2628" y="23.645320197044335"/>
+        </scene>
+        <!--Large Poster View Controller-->
+        <scene sceneID="nXV-N5-deL">
+            <objects>
+                <viewController id="isU-jg-EjW" customClass="LargePosterViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="s25-bc-wqy">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X2U-l8-ENx">
+                                <rect key="frame" x="0.0" y="88" width="375" height="724"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="VWN-x0-qim"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="hnM-zo-hDA"/>
+                    <connections>
+                        <outlet property="largePosterView" destination="X2U-l8-ENx" id="4XH-Ff-cfj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YsN-kv-M5d" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3498.4000000000001" y="-400.49261083743846"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="AIR-p8-jT1">
@@ -314,6 +357,9 @@
             <point key="canvasLocation" x="110" y="24"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="vvF-IH-pOP"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="now_playing_tabbar_item" width="21" height="21"/>
         <image name="superhero_tabbar_item" width="21" height="23"/>
