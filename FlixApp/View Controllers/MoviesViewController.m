@@ -48,7 +48,21 @@
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchMovies) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
+
 }
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+}
+-(void)searchBar:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+}
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self.searchBar resignFirstResponder];
+}
+
 - (void)fetchMovies {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Network Error"
            message:@"Couldn't fetch movies, please check your connection and retry"
@@ -141,7 +155,7 @@
                     cell.posterView.image = image;
                     
                     //Animate UIImageView back to alpha 1 over 0.3sec
-                    [UIView animateWithDuration:0.3 animations:^{
+                    [UIView animateWithDuration:0.5 animations:^{
                         cell.posterView.alpha = 1.0;
                     }];
                 }
@@ -171,7 +185,7 @@
     
     //NSLog(@"%@",[NSString stringWithFormat:@"row: %d, section:%d", indexPath.row, indexPath.section]);
     //cell.textLabel.text = [NSString stringWithFormat:@"row: %d, section:%d", indexPath.row, indexPath.section];
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     return cell;
 }
 
@@ -184,7 +198,7 @@
     // Pass the selected object to the new view controller.
     UITableViewCell *tappedCell = sender;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
-    NSDictionary *movie = self.movies[indexPath.row];
+    NSDictionary *movie = self.searchMovies[indexPath.row];
     DetailsViewController *detailsViewController = [segue destinationViewController];
     detailsViewController.movie = movie;
 }
