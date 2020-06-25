@@ -21,6 +21,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.title = @"Superheroes";
+    UINavigationBar *navigationBar = self.navigationController.navigationBar;
+    [navigationBar setBackgroundImage:[UIImage imageNamed:@"background.jpeg"] forBarMetrics:UIBarMetricsDefault];
+    navigationBar.titleTextAttributes = @{NSFontAttributeName : [UIFont boldSystemFontOfSize:24],
+                                          NSForegroundColorAttributeName : [UIColor colorWithRed:1 green:1 blue:1 alpha:1]};
+                                      
     
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;

@@ -11,11 +11,9 @@
 #import "UIImageView+AFNetworking.h"
 #import "DetailsViewController.h"
 #import "SVProgressHUD.h"
+#import "TrailerViewController.h"
 
-@interface MoviesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>{
-    BOOL isFiltered;
-    
-}
+@interface MoviesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *movies;
 @property (nonatomic, strong) NSArray *searchMovies;
@@ -34,8 +32,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.title = @"Movies";
+    UINavigationBar *navigationBar = self.navigationController.navigationBar;
+    [navigationBar setBackgroundImage:[UIImage imageNamed:@"background.jpeg"] forBarMetrics:UIBarMetricsDefault];
+    navigationBar.titleTextAttributes = @{NSFontAttributeName : [UIFont boldSystemFontOfSize:24],
+                                          NSForegroundColorAttributeName : [UIColor colorWithRed:1 green:1 blue:1 alpha:1]};
     
-    isFiltered = false;
+    
+    self.tableView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpeg"]];
+    
+    
+    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.searchBar.delegate = self;
@@ -48,7 +55,7 @@
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchMovies) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
-
+    
 }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
@@ -65,46 +72,45 @@
 
 - (void)fetchMovies {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Network Error"
-           message:@"Couldn't fetch movies, please check your connection and retry"
-    preferredStyle:(UIAlertControllerStyleAlert)];
+                                                                   message:@"Couldn't fetch movies, please check your connection and retry"
+                                                            preferredStyle:(UIAlertControllerStyleAlert)];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
-                                                        style:UIAlertActionStyleCancel
-                                                      handler:^(UIAlertAction * _Nonnull action) {
-                                                      }];
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+    }];
     [alert addAction:cancelAction];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * _Nonnull action) {
-                                                     }];
+    }];
     [alert addAction:okAction];
     
     NSURL *url = [NSURL URLWithString:@"https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-           if (error != nil) {
-               NSLog(@"%@", [error localizedDescription]);
-               [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert
-                 animated:YES
-               completion:^{
-                       // optional code for what happens after the alert controller has finished presenting
-               }];
-           }
-           else {
-               NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-               self.movies = dataDictionary[@"results"];
-               NSLog(@"%@", self.movies);
-               self.searchMovies = self.movies;
-               [self.tableView reloadData];
-               
-               // TODO: Get the array of movies
-               // TODO: Store the movies in a property to use elsewhere
-               // TODO: Reload your table view data
-           }
+        if (error != nil) {
+            NSLog(@"%@", [error localizedDescription]);
+            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert
+                                                                                         animated:YES
+                                                                                       completion:^{
+            }];
+        }
+        else {
+            NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            self.movies = dataDictionary[@"results"];
+            NSLog(@"%@", self.movies);
+            self.searchMovies = self.movies;
+            [self.tableView reloadData];
+            
+            // TODO: Get the array of movies
+            // TODO: Store the movies in a property to use elsewhere
+            // TODO: Reload your table view data
+        }
         [self.refreshControl endRefreshing];
         [self.activityIndicator stopAnimating];
         //[SVProgressHUD dismiss];
-       }];
+    }];
     [task resume];
 }
 
@@ -112,64 +118,35 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.searchMovies.count;
 }
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //Change the selected background view of the cell.
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-     if (searchText.length != 0) {
-            
-            NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-            return [NSLocalizedString(evaluatedObject[@"title"],nil) containsString:searchText];
-            }];
-            self.searchMovies = [self.movies filteredArrayUsingPredicate:predicate];
-            
-            
-        }
-        else {
-            self.searchMovies = self.movies;
-        }
+    if (searchText.length != 0) {
         
-        [self.tableView reloadData];
-     
+        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+            return [NSLocalizedString(evaluatedObject[@"title"],nil) containsString:searchText];
+        }];
+        self.searchMovies = [self.movies filteredArrayUsingPredicate:predicate];
+        
+        
+    }
+    else {
+        self.searchMovies = self.movies;
+    }
+    
+    [self.tableView reloadData];
+    
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     MovieCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MovieCell"];
     //UITableViewCell *cell = [[UITableViewCell alloc] init];
-             NSDictionary *movie = self.searchMovies[indexPath.row];
-             cell.titleLabel.text = movie[@"title"];
-             cell.synopsisLabel.text = movie[@"overview"];
-             NSString *baseURLString = @"https://image.tmdb.org/t/p/w500";
-             NSString *posterURLString = movie[@"poster_path"];
-             NSString *fullPosterURLString = [baseURLString stringByAppendingString:posterURLString];
-             NSURL *posterURL = [NSURL URLWithString:fullPosterURLString];
-             cell.posterView.image = nil;
-            //[cell.posterView setImageWithURL:posterURL];
-            NSURLRequest *request = [NSURLRequest requestWithURL:posterURL];
-            [cell.posterView setImageWithURLRequest:request placeholderImage:nil
-            success:^(NSURLRequest *imageRequest, NSHTTPURLResponse *imageResponse, UIImage *image) {
-                
-                // imageResponse will be nil if the image is cached
-                if (imageResponse) {
-                    NSLog(@"Image was NOT cached, fade in image");
-                    cell.posterView.alpha = 0.0;
-                    cell.posterView.image = image;
-                    
-                    //Animate UIImageView back to alpha 1 over 0.3sec
-                    [UIView animateWithDuration:0.5 animations:^{
-                        cell.posterView.alpha = 1.0;
-                    }];
-                }
-                else {
-                    NSLog(@"Image was cached so just update the image");
-                    cell.posterView.image = image;
-                }
-            }
-            failure:^(NSURLRequest *request, NSHTTPURLResponse * response, NSError *error) {
-                // do something for the failure condition
-            }];
-    
-/*
-    NSDictionary *movie = self.movies[indexPath.row];
+    NSDictionary *movie = self.searchMovies[indexPath.row];
     cell.titleLabel.text = movie[@"title"];
     cell.synopsisLabel.text = movie[@"overview"];
     NSString *baseURLString = @"https://image.tmdb.org/t/p/w500";
@@ -177,15 +154,49 @@
     NSString *fullPosterURLString = [baseURLString stringByAppendingString:posterURLString];
     NSURL *posterURL = [NSURL URLWithString:fullPosterURLString];
     cell.posterView.image = nil;
-    [cell.posterView setImageWithURL:posterURL];
-    
+    //[cell.posterView setImageWithURL:posterURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:posterURL];
+    [cell.posterView setImageWithURLRequest:request placeholderImage:nil
+                                    success:^(NSURLRequest *imageRequest, NSHTTPURLResponse *imageResponse, UIImage *image) {
+        
+        // imageResponse will be nil if the image is cached
+        if (imageResponse) {
+            NSLog(@"Image was NOT cached, fade in image");
+            cell.posterView.alpha = 0.0;
+            cell.posterView.image = image;
+            
+            //Animate UIImageView back to alpha 1 over 0.3sec
+            [UIView animateWithDuration:0.5 animations:^{
+                cell.posterView.alpha = 1.0;
+            }];
+        }
+        else {
+            NSLog(@"Image was cached so just update the image");
+            cell.posterView.image = image;
+        }
     }
-*/
+                                    failure:^(NSURLRequest *request, NSHTTPURLResponse * response, NSError *error) {
+        // do something for the failure condition
+    }];
+    
+    /*
+     NSDictionary *movie = self.movies[indexPath.row];
+     cell.titleLabel.text = movie[@"title"];
+     cell.synopsisLabel.text = movie[@"overview"];
+     NSString *baseURLString = @"https://image.tmdb.org/t/p/w500";
+     NSString *posterURLString = movie[@"poster_path"];
+     NSString *fullPosterURLString = [baseURLString stringByAppendingString:posterURLString];
+     NSURL *posterURL = [NSURL URLWithString:fullPosterURLString];
+     cell.posterView.image = nil;
+     [cell.posterView setImageWithURL:posterURL];
+     
+     }
+     */
     //cell.textLabel.text = movie[@"title"];
     
     //NSLog(@"%@",[NSString stringWithFormat:@"row: %d, section:%d", indexPath.row, indexPath.section]);
     //cell.textLabel.text = [NSString stringWithFormat:@"row: %d, section:%d", indexPath.row, indexPath.section];
-    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     return cell;
 }
 

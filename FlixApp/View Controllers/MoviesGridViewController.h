@@ -11,6 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MoviesGridViewController : UIViewController
+@property (strong, nonatomic) NSNumber *movieID;
+
 
 @end
 
