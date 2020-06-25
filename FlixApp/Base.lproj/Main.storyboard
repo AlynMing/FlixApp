@@ -138,6 +138,58 @@
             </objects>
             <point key="canvasLocation" x="1162.4000000000001" y="893.3497536945813"/>
         </scene>
+        <!--Similar Movies View Controller-->
+        <scene sceneID="oe7-jv-r9M">
+            <objects>
+                <viewController id="gVd-7w-jOE" customClass="SimilarMoviesViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hYj-Zc-FVN">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="L4W-j8-F6f">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="fAJ-hS-MXk">
+                                    <size key="itemSize" width="165" height="220"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SimilarMovieCollectionCell" id="drF-of-5RN" customClass="SimilarMovieCollectionCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="179" height="248"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="y5B-xq-yXk">
+                                            <rect key="frame" x="0.0" y="0.0" width="179" height="248"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ygd-qJ-e0o">
+                                                    <rect key="frame" x="0.0" y="0.0" width="179" height="259"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="179" height="248"/>
+                                        <connections>
+                                            <outlet property="posterView" destination="Ygd-qJ-e0o" id="1rp-dS-bTy"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="kNM-dz-T0f"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="oBY-vF-sTV"/>
+                    <connections>
+                        <outlet property="collectionView" destination="L4W-j8-F6f" id="xFa-0e-nHK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="n77-52-MNb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2912.8000000000002" y="885.96059113300498"/>
+        </scene>
         <!--Details Grid View Controller-->
         <scene sceneID="O2f-gh-a4K">
             <objects>
@@ -158,14 +210,14 @@
                                 <rect key="frame" x="16" y="349" width="343" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7vW-GK-t7Y">
                                 <rect key="frame" x="144" y="241" width="215" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
-                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="32"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -178,6 +230,7 @@
                     <connections>
                         <outlet property="backdropView" destination="aVy-Vk-9w5" id="v0b-4e-hLE"/>
                         <outlet property="posterView" destination="wWA-CM-WGm" id="Om0-BM-AuO"/>
+                        <outlet property="scrollView" destination="dgi-d5-aah" id="ew4-eR-hjJ"/>
                         <outlet property="synopsisLabel" destination="bcQ-KM-8Js" id="nl2-nd-eZA"/>
                         <outlet property="titleLabel" destination="7vW-GK-t7Y" id="6AV-3X-5Bv"/>
                     </connections>
@@ -235,6 +288,35 @@
                                     <segue destination="UZm-g5-YIw" kind="presentation" id="xOk-FX-BHn"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0a2-li-rFW">
+                                <rect key="frame" x="148" y="335" width="107" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Similar Movies">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <segue destination="gVd-7w-jOE" kind="show" id="qPn-Ef-Eir"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FL4-gr-1D4">
+                                <rect key="frame" x="329" y="336" width="30" height="28"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <segue destination="UXe-M4-x1P" kind="presentation" id="hYJ-Is-zOb"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="7" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jol-QF-lUk">
+                                <rect key="frame" x="300" y="335" width="35" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="tb7-pc-oQJ"/>
@@ -245,7 +327,10 @@
                     <connections>
                         <outlet property="backdropView" destination="C9T-eU-qxu" id="Q1p-zD-TwU"/>
                         <outlet property="posterView" destination="XUn-JJ-pdI" id="1mV-QD-hAF"/>
+                        <outlet property="ratingLabel" destination="jol-QF-lUk" id="eBe-1H-Iqn"/>
+                        <outlet property="reviewButton" destination="FL4-gr-1D4" id="rOH-BJ-Wq7"/>
                         <outlet property="scrollView" destination="jER-IF-4kJ" id="GPg-h9-TcK"/>
+                        <outlet property="similarButton" destination="0a2-li-rFW" id="jje-yB-Yv6"/>
                         <outlet property="synopsysLabel" destination="zw2-By-6rE" id="M5Y-In-k55"/>
                         <outlet property="titleLabel" destination="Gma-qz-l5V" id="JXp-lp-5iS"/>
                         <outlet property="trailerButton" destination="F5B-vk-kGM" id="gHu-YA-QbR"/>
@@ -293,6 +378,35 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k9g-lH-8O9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2628" y="23.645320197044335"/>
+        </scene>
+        <!--Reviews View Controller-->
+        <scene sceneID="Z6w-IM-QM2">
+            <objects>
+                <viewController id="UXe-M4-x1P" customClass="ReviewsViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="53X-EO-DHh">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XGp-Ep-qVV">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="dzM-kr-5bf"/>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="XGp-Ep-qVV" id="uFx-cM-FfX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="71R-1P-ekE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3588" y="304.43349753694582"/>
         </scene>
         <!--Large Poster View Controller-->
         <scene sceneID="nXV-N5-deL">
