@@ -2,7 +2,7 @@
 
 **Name of your app** is a movies app using the [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
-Time spent: **5** hours for MPV
+Time spent: **5** hours for MPV + 15 for additional features
 
 ## User Stories
 
@@ -33,6 +33,9 @@ The following **additional** features are implemented:
 - [x] See movie rating
 - [x] See movie reviews (Tapping on the movie rating)
 - [x] See movie trailer 
+- [x] Allows login to your account
+- [x] Improve error handling to avoid erros when there is no backdrop image
+- [x] Favorites tab! (Please note, for usage you have to log in to your account and then make a list, then you can use the favorites tab search bar to type the list ID, unfortunatetly: making lists within the app is not supported)
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
@@ -43,12 +46,12 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://g.recordit.co/WuOWKVoKfL.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+Please watch here: http://g.recordit.co/fjWWNGx6Bg.gif'
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
-
+Sending a post request was the hardest thing i've ever done :')
 
 
 ## Credits
@@ -59,7 +62,7 @@ List an 3rd party libraries, icons, graphics, or other assets you used in your a
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2020] [Xurxo Riesco]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
