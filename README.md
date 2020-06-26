@@ -35,7 +35,7 @@ The following **additional** features are implemented:
 - [x] See movie trailer 
 - [x] Allows login to your account
 - [x] Improve error handling to avoid erros when there is no backdrop image
-- [x] Favorites tab! (Please note, for usage you have to log in to your account and then make a list, then you can use the favorites tab search bar to type for list ID, unfortunatetly: making lists within the app is not supported)
+- [x] Favorites tab! (Please note, for usage you have to log in to your account and then make a list, then you can use the favorites tab search bar to type the list ID, unfortunatetly: making lists within the app is not supported)
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
