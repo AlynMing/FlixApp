@@ -1,46 +1,85 @@
 //
-//  MoviesGridViewController.m
+//  FavoritesViewController.m
 //  FlixApp
 //
-//  Created by Xurxo Riesco on 6/24/20.
+//  Created by Xurxo Riesco on 6/26/20.
 //  Copyright © 2020 Xurxo Riesco. All rights reserved.
 //
 
-#import "MoviesGridViewController.h"
-#import "MovieCollectionCell.h"
+#import "FavoritesViewController.h"
+#import "FavoritesCollectionViewCell.h"
 #import "UIImageView+AFNetworking.h"
-#import "DetailsViewController.h"
-@interface MoviesGridViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
-@property (nonatomic, strong) NSArray *movies;
-@property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 
-
+@interface FavoritesViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate>
+@property (strong, nonatomic) NSArray *movies;
+@property (strong, nonatomic) NSString *listID;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @end
 
-@implementation MoviesGridViewController
+@implementation FavoritesViewController
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"Superheroes";
-    UINavigationBar *navigationBar = self.navigationController.navigationBar;
-    [navigationBar setBackgroundImage:[UIImage imageNamed:@"background.jpeg"] forBarMetrics:UIBarMetricsDefault];
-    navigationBar.titleTextAttributes = @{NSFontAttributeName : [UIFont boldSystemFontOfSize:24],
-                                          NSForegroundColorAttributeName : [UIColor colorWithRed:1 green:1 blue:1 alpha:1]};
-    self.collectionView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpeg"]];
-                                      
-    
+    self.searchBar.delegate = self;
     self.collectionView.dataSource = self;
-    self.collectionView.delegate = self;
+    self.collectionView.delegate.self;
+    self.searchBar.searchTextField.textColor = [UIColor whiteColor];
+    self.navigationItem.title = @"Favorites";
+       UINavigationBar *navigationBar = self.navigationController.navigationBar;
+       [navigationBar setBackgroundImage:[UIImage imageNamed:@"background.jpeg"] forBarMetrics:UIBarMetricsDefault];
+       navigationBar.titleTextAttributes = @{NSFontAttributeName : [UIFont boldSystemFontOfSize:24],
+    NSForegroundColorAttributeName : [UIColor colorWithRed:1 green:1 blue:1 alpha:1]};
     
+    self.collectionView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpeg"]];
+    
+    self.searchBar.backgroundColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpeg"]];
+    self.listID = @"25";
+
     [self fetchMovies];
-    
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*)self.collectionView.collectionViewLayout;
     CGFloat postersPerLine = 2;
     CGFloat itemWidth = self.collectionView.frame.size.width / postersPerLine;
     CGFloat itemHeight = itemWidth * 1.5;
     layout.itemSize = CGSizeMake(itemWidth, itemHeight);
     // Do any additional setup after loading the view.
+    [self.collectionView reloadData];
 }
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    self.listID = searchBar.text;
+    [self fetchMovies];
+    [self.collectionView reloadData];
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+    
+    if(searchText !=0){
+        self.listID = searchText;
+        [self fetchMovies];
+        
+    }
+    else{
+        self.listID = @"25";
+        [self fetchMovies];
+        
+    }
+        [self.collectionView reloadData];
+        
+    
+}
+
+-(void)searchBar:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+}
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self.searchBar resignFirstResponder];
+}
+
 
 - (void)fetchMovies {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Network Error"
@@ -57,7 +96,13 @@
     }];
     [alert addAction:okAction];
     
-    NSURL *url = [NSURL URLWithString:@"https://api.themoviedb.org/3/movie/297762/similar?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed&language=en-US&page=1"];
+    NSString *baseUrl = @"https://api.themoviedb.org/3/list/";
+    NSString *listNumber = self.listID;
+    NSString *prefinalURL = [baseUrl stringByAppendingString:listNumber];
+    NSString *apiKey =@"?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed&language=en-US";
+    NSString *finalUrl = [prefinalURL stringByAppendingString:apiKey];
+    NSLog(@"%@",finalUrl);
+    NSURL *url = [NSURL URLWithString:finalUrl];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -71,7 +116,8 @@
         }
         else {
             NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            self.movies = dataDictionary[@"results"];
+            self.movies = dataDictionary[@"items"];
+            NSLog(@"%@", self.movies);
             [self.collectionView reloadData];
             
             // TODO: Get the array of movies
@@ -82,21 +128,8 @@
     }];
     [task resume];
 }
-
-
-#pragma mark - Navigation
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    UICollectionViewCell *tappedCell = sender;
-    NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
-    NSDictionary *movie = self.movies[indexPath.row];
-    DetailsViewController *detailsViewController = [segue destinationViewController];
-    detailsViewController.movie = movie;
-    
-}
-
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    MovieCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MovieCollectionCell" forIndexPath: indexPath];
+    FavoritesCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FavoritesCollectionViewCell" forIndexPath: indexPath];
     
     NSDictionary *movie = self.movies[indexPath.item];
     
@@ -136,5 +169,14 @@
         return self.movies.count;
     }
      
-     
-     @end
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

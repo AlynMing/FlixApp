@@ -11,7 +11,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "DetailsViewController.h"
 #import "SVProgressHUD.h"
-#import "TrailerViewController.h"
+#import "LogInViewController.h"
 
 @interface MoviesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
@@ -40,6 +40,8 @@
     
     
     self.tableView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpeg"]];
+    self.searchBar.backgroundColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"background.jpeg"]];
+    self.searchBar.searchTextField.textColor = [UIColor whiteColor];
     
     
     
@@ -55,12 +57,21 @@
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchMovies) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
+    NSLog(@"Token: %@", self.token);
+    NSLog(@"Hello");
+    if (self.token != nil)
+    {
+        NSLog(@"Fetching");
+            [self fetchID];
+    }
+
     
 }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [searchBar resignFirstResponder];
 }
+
 -(void)searchBar:(UISearchBar *)searchBar
 {
     [searchBar resignFirstResponder];
@@ -69,7 +80,48 @@
 {
     [self.searchBar resignFirstResponder];
 }
-
+- (void)fetchID {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Network Error"
+                                                                   message:@"Couldn't fetch movies, please check your connection and retry"
+                                                            preferredStyle:(UIAlertControllerStyleAlert)];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alert addAction:cancelAction];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alert addAction:okAction];
+    
+    NSString *baseurl = @"https://api.themoviedb.org/3/authentication/session/new?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed&request_token=";
+    NSString *sessionstring = [baseurl stringByAppendingString:self.token];
+    NSURL *url = [NSURL URLWithString:sessionstring];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error != nil) {
+            NSLog(@"%@", [error localizedDescription]);
+            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert
+                                                                                         animated:YES
+                                                                                       completion:^{
+            }];
+        }
+        else {
+            NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            NSLog(@"%@", dataDictionary);
+            
+            // TODO: Get the array of movies
+            // TODO: Store the movies in a property to use elsewhere
+            // TODO: Reload your table view data
+        }
+        [self.refreshControl endRefreshing];
+        [self.activityIndicator stopAnimating];
+        //[SVProgressHUD dismiss];
+    }];
+    [task resume];
+}
 - (void)fetchMovies {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Network Error"
                                                                    message:@"Couldn't fetch movies, please check your connection and retry"
@@ -212,6 +264,7 @@
     NSDictionary *movie = self.searchMovies[indexPath.row];
     DetailsViewController *detailsViewController = [segue destinationViewController];
     detailsViewController.movie = movie;
+    LogInViewController *logIinViewController = [segue destinationViewController];
 }
 
 @end

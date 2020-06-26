@@ -36,10 +36,19 @@
     NSString *fullPosterURLString = [baseURLString stringByAppendingString:posterURLString];
     NSURL *posterURL = [NSURL URLWithString:fullPosterURLString];
     [self.posterView setImageWithURL:posterURL];
-    NSString *backdropURLString = self.movie[@"backdrop_path"];
-    NSString *fullBackdropURLString = [baseURLString stringByAppendingString:backdropURLString];
-    NSURL *backdropURL = [NSURL URLWithString:fullBackdropURLString];
-    [self.backdropView setImageWithURL:backdropURL];
+    
+    if(self.movie[@"backdrop_path"] == NULL){
+        NSString *backdropURLString = self.movie[@"backdrop_path"];
+        NSString *fullBackdropURLString = [baseURLString stringByAppendingString:backdropURLString];
+        NSURL *backdropURL = [NSURL URLWithString:fullBackdropURLString];
+        [self.backdropView setImageWithURL:backdropURL];}
+    else{
+        NSString *backdropURLString = self.movie[@"poster_path"];
+        NSString *fullBackdropURLString = [baseURLString stringByAppendingString:backdropURLString];
+        NSURL *backdropURL = [NSURL URLWithString:fullBackdropURLString];
+        [self.backdropView setImageWithURL:backdropURL];
+        
+    }
     self.titleLabel.text = self.movie[@"title"];
     self.synopsysLabel.text = self.movie[@"overview"];
     NSString *score = [NSString stringWithFormat:@"%@",self.movie[@"vote_average"]];

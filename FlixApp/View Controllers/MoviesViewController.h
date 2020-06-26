@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MoviesViewController : UIViewController
+@property (strong, nonatomic) NSString *token;
 
 @end
 
